@@ -12,21 +12,34 @@ const ws = new webSocket.Server({server})
 
 
 ws.on('headers',(headers)=>{
-    console.log('header-',headers);
+    
 })
 
-ws.on('connection',(socket)=>{
-    socket.on('message',(data)=>{
-        console.log(`client message ${data}`);
-    })
-    console.log('new user');
+ws.on('connection',(socket,req)=>{
+   const user_id = req.url.slice(1)
+   socket.id = user_id
 
-    socket.send('hi I`m get your msg ,backyard')
+   socket.send(JSON.stringify({
+    userId:user_id
+   }))
+
+    socket.on('message',(data)=>{
+       // socket.send(`${data}`)
+       ws.clients.forEach(client=>{
+        client.send(JSON.stringify(
+            {
+            userId:socket.id,
+            message:data.toString()
+            }
+    ))
+       })
+    })
+   
 
 })
 // Specify the port to listen on
 
-const port = 5500;
+const port = 8000;
 
 // Start the server
 server.listen(port, () => {
