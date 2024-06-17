@@ -6,11 +6,11 @@
                 <img class="h-8" src="https://visualpharm.com/assets/163/Send%20Message-595b40b85ba036ed117daa36.svg" alt="send"></button>
         </div>
        
-        <ul id="chatBox " class="w-full  [&>li]:w-5/12 [&>li]:rounded-tr-xl   [&>li]:rounded-bl-xl  [&>li]:rounded-br-sm  [&>li]:rounded-tl-sm  [&>li]:p-1"   >
+        <ul id="chatBox " class="chat w-full  [&>li]:flex  [&>li]:h-auto  [&>li]:w-9/12 [&>li]:rounded-tr-xl   [&>li]:rounded-bl-xl  [&>li]:rounded-br-sm  [&>li]:rounded-tl-sm  [&>li]:p-1"   >
             <li class="float-right bg-slate-200" >start</li>
             <li class="float-left bg-slate-500" >end</li>
         </ul>
-      
+     
     </div>
 </template>
 
@@ -19,6 +19,7 @@ import { onMounted } from 'vue'
 
 
 let userName = prompt("enter u name")
+
 
 onMounted(()=>{
     let createMessageBtn = document.getElementById('add')
@@ -50,9 +51,24 @@ socket.addEventListener('message' , (event)=>{
     const data = JSON.parse(event.data)
     if (data.message) {
         console.log(`server data => ${event.data}`);
-        chat.insertAdjacentHTML('beforeend',`<li class=${data.userId === userName ? "bg-teal-100 bg-opacity-80 float-right " : "bg-white bg-opacity-90 float-left "} >
-            <span>${data.userId}</span> :
-            <span>${data.message}<span></li>`)
+        chat.insertAdjacentHTML('beforeend',data.userId === userName ? 
+        ` 
+        <div class="messages-chat" >
+        <div class="message" >
+        <div  class="response" >
+            <p class="text" >${data.message}</p>
+        </div>
+      </div>
+       </div>` :
+        ` 
+         <div class="messages-chat" >
+        <div class="message" >
+       
+            <p class="text" >${data.message}</p>
+       
+      </div>
+       </div>
+      `)
     }
 
 })
@@ -63,6 +79,15 @@ socket.addEventListener('message' , (event)=>{
 
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
+.own-message{
+    background-color: cadetblue;
+    width: 60%;
+    height: auto;
+   
+    padding: 1px 2px;
+    white-space:normal;
+    float: right;
+}
 
 </style>
