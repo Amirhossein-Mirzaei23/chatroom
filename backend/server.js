@@ -1,5 +1,4 @@
-// fileName : server.js 
-// Example using the http module
+
 const { Socket } = require('dgram');
 const http = require('http');
 const webSocket = require('ws')
